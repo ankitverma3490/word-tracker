@@ -1,15 +1,12 @@
 {
-    "name": "word-tracker-backend",
+    "name": "word-tracker-root",
     "version": "1.0.0",
-    "description": "Node.js backend for Word Tracker",
-    "main": "server.js",
+    "private": true,
     "scripts": {
-        "start": "node server.js"
-    },
-    "dependencies": {
-        "mysql2": "^3.9.0"
+        "install": "cd frontend && npm install",
+        "build": "cd frontend && npm run build"
     },
     "engines": {
-        "node": ">=14.0.0"
+        "node": ">=18.13.0"
     }
 }
