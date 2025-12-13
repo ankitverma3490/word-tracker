@@ -3,7 +3,7 @@
 
 function handleCors()
 {
-    // Allow from localhost:4200 (Angular) and localhost:8000 (Self)
+    // Define allowed origins
     $allowed_origins = [
         'http://localhost:4200',
         'https://word-tracker-henna.vercel.app'
@@ -11,21 +11,19 @@ function handleCors()
 
     $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
-    // If no origin, logic flow continues, but we might want to default for tools like Postman if not strict
-    if (in_array($origin, $allowed_origins) || empty($origin)) {
-        header("Access-Control-Allow-Origin: " . ($origin ?: '*'));
-    } else {
-        // Optional: Allow * for development if consistent with security posture
-        header("Access-Control-Allow-Origin: *");
+    // Check if origin is allowed
+    if (in_array($origin, $allowed_origins)) {
+        header("Access-Control-Allow-Origin: $origin");
+        header("Access-Control-Allow-Credentials: true");
+        header("Access-Control-Max-Age: 86400"); // Cache for 1 day
     }
 
-    header('Access-Control-Allow-Credentials: true');
-    header('Access-Control-Max-Age: 86400');
-
-    // preflight
+    // Handle Preflight Options
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-        header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
-        header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
+        if (in_array($origin, $allowed_origins)) {
+            header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+            header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
+        }
         exit(0);
     }
 }
